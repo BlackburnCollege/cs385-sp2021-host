@@ -75,14 +75,24 @@
   <body class="body" onresize="OnResize()">
     <h4 style="size: 10%; color: white; text-align: center;">Flow Controller</h4>
     <div id="setup" class="setup">
+      IP: <br/>
       <input
         id="wsip"
         type="text"
         value="10.151.2.138" 
         style="background-color: lightpink; color: blue; border: none;"
       />
+      
+      <br/> Username: <br/>
+      <input
+        id="username"
+        type="text"
+        value="Anonymous"
+        style="background-color: lightpink; color: blue; border: none;"
+      />
+      <br/>
       <button id="setupB" style="background-color: cadetblue; border: none;">
-        connect
+        Connect
       </button>
     </div>
 
@@ -414,13 +424,22 @@
         y: false,
         start: false
       }
-      // var heartbeat = {
-      //   "user": {
-      //     "name": "title",
-      //     "ip": "10.0.0.1",
-      //     "controller": "object"
-      //   }
-      // }
+      var user = {
+        header: "",
+        name: "",
+        ip: "",
+        controller: {
+          joystick: {
+            x: 0,
+            y: 0
+          },
+          a: false,
+          b: false,
+          x: false,
+          y: false,
+          start: false
+        }
+      }
 
       let output = document.getElementById("output"),
         left = document.getElementById("left"),
@@ -466,10 +485,18 @@
 
       let ISCONNECTED = false;
 
+      let username = "null";
       function setupConnection() {
+        username = document.getElementById("username").value;
         let ip = setupbtn.value;
+        if(username == null){
+          return;
+        }
+        user.name = username;
+        user.ip = "0.0.0.0";
+        user.header = "user";
         console.log(ip);
-        wsUri = "ws://" + wsip.value + ":8080" + "/";
+        wsUri = "ws://" + wsip.value + ":8000" + "/";
         websocket = new WebSocket(wsUri);
 
         websocket.onopen = function(e) {
@@ -508,7 +535,6 @@
         };
       }
 
-      //change to json
       function doSend(message) {
         writeToScreen("SENT: " + message);
         websocket.send(message);
@@ -540,11 +566,20 @@
 
 
       function sendController() {
-        doSend(JSON.stringify(betterController));
+        user.controller.a =betterController.a;
+        user.controller.b = betterController.b;
+        user.controller.x = betterController.x;
+        user.controller.y = betterController.y;
+        user.controller.start = betterController.start;
+        user.controller.joystick.x = betterController.joystick.x;
+        user.controller.joystick.y = betterController.joystick.y;
+
+        doSend(JSON.stringify(user));
         betterController.a = false;
         betterController.b = false;
         betterController.x = false;
         betterController.y = false;
+        betterController.start = false;
       }
 
       function onAButton() {
