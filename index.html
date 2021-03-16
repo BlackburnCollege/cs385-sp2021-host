@@ -426,7 +426,6 @@
       }
 
       var user = {
-        head: "",
         name: "",
         ip: "",
         controller: {
@@ -444,7 +443,7 @@
       var header = {
         header: "",
         type: "",
-        JSONBlock: ""
+        jsonBlock: ""
       }
 
       let output = document.getElementById("output"),
@@ -580,9 +579,9 @@
         user.controller.joystick.x = betterController.joystick.x;
         user.controller.joystick.y = betterController.joystick.y;
 
-        header.head = user;
-        header.type = userController;
-        header.JSONBlock = JSON.stringify(user);
+        header.header = "user";
+        header.type = "userController";
+        header.jsonBlock = JSON.stringify(user);
 
         doSend(JSON.stringify(header));
         betterController.a = false;
