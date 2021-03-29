@@ -469,10 +469,22 @@
       // right.addEventListener("touchstart", onRight);
       //riht.addEventListener("click",onRight);
       setupbtn.addEventListener("click", setupConnection);
+      
+      right.addEventListener("click", onXButton);
+      right.addEventListener("touchstart", onXButton);
+
+      xButton.addEventListener("click", onXButton);
       xButton.addEventListener("touchstart", onXButton);
+
+      yButton.addEventListener("click", onYButton);
       yButton.addEventListener("touchstart", onYButton);
+
+      aButton.addEventListener("click", onAButton);
       aButton.addEventListener("touchstart", onAButton);
+
+      bButton.addEventListener("click", onBButton);
       bButton.addEventListener("touchstart", onBButton);
+
 
       // //for message creation
       // let joyvalues = "0,0";
@@ -604,7 +616,6 @@
       }
 
       function onXButton() {
-        console.log(betterController.x);
         betterController.x = true;
         vibrate();
         sendController();
