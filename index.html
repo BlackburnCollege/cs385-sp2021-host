@@ -73,7 +73,8 @@
   </head>
   <body class="body" onresize="OnResize()">
     <h4 style="size: 10%; color: white; text-align: center;">Flow Controller</h4>
-    <div id="setup" class="setup">
+    <!-- The field that people insert their IP -->
+    <div id="setup" class="setup"></div>
       IP: <br/>
       <input
         id="wsip"
@@ -81,7 +82,8 @@
         value="10.151.2.138" 
         style="background-color: lightpink; color: blue; border: none;"
       />
-      <br/> Code <br/>
+      <!-- The token field. called "Code" because it's what a normal user would refer to it as -->
+      <br/> Code: <br/>
       <input
         id="token"
         type="text"
@@ -89,6 +91,7 @@
         style="background-color: lightpink; color: blue; border: none;"
       />
       
+      <!-- The field in which a user enters their username -->
       <br/> Username: <br/>
       <input
         id="username"
@@ -97,6 +100,8 @@
         style="background-color: lightpink; color: blue; border: none;"
       />
       <br/>
+
+      <!-- The "Connect" button -->
       <button id="setupB" style="background-color: cadetblue; border: none;">
         Connect
       </button>
@@ -487,6 +492,7 @@
       let leftJoy = null;
       setInterval(onLeftJoystick,50);
 
+      // Add events for the case of a button being hit or the joystick being moved
       setupbtn.addEventListener("click", setupConnection);
       
       right.addEventListener("click", onXButton);
@@ -514,6 +520,10 @@
       let ISCONNECTED = false;
 
       let username = "null";
+
+      /**
+       * Sets up the connection with the server
+       */
       function setupConnection() {
         
         username = document.getElementById("username").value;
@@ -567,6 +577,9 @@
         };
       }
 
+      /**
+       * Sends a string to the server
+       */
       function doSend(message) {
         writeToScreen("SENT: " + message);
         websocket.send(message);
@@ -576,6 +589,9 @@
         output.innerHTML = message;
       }
 
+      /**
+       * Causes the appropriate reaction in the case of the joystick being moved
+       */
       function onLeftJoystick() {
         if(leftJoy){
           if(leftJoy.GetPressed()){
@@ -589,6 +605,9 @@
         }
       }
 
+      /**
+       * Sends the current state of the user (and by extension, the controller)
+       */
       function sendController() {
         user.controller.a = betterController.a;
         user.controller.b = betterController.b;
@@ -610,36 +629,54 @@
         betterController.start = false;
       }
 
+      /**
+       * Causes the appropriate reaction in the case of the A button being pressed
+       */
       function onAButton() {
         betterController.a = true;
         vibrate();
         sendController();
       }
 
+      /**
+       * Causes the appropriate reaction in the case of the B button being pressed
+       */
       function onBButton() {
         betterController.b = true;
         vibrate();
         sendController();
       }
 
+      /**
+       * Causes the appropriate reaction in the case of the X button being pressed
+       */
       function onXButton() {
         betterController.x = true;
         vibrate();
         sendController();
       }
 
+      /**
+       * Causes the appropriate reaction in the case of the Y button being pressed
+       */
       function onYButton() {
         betterController.y = true;
         vibrate();
         sendController();
       }
 
+      /**
+       * Vibrates. Not sure what you expected. it'
+       */
       function vibrate() {
         if ("vibrate" in navigator) {
           navigator.vibrate(50);
         }
       }
 
+      /**
+       * Sets a device to full screen
+       */
       var elem = document.documentElement;
       function openFullscreen() {
         if (elem.requestFullscreen) {
@@ -656,6 +693,9 @@
         }
       }
 
+      /**
+       * Allows you to exit full screen mode
+       */
       function closeFullscreen() {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -668,6 +708,9 @@
         }
       }
 
+      /**
+       * determines the sixe of a window when the size is changed
+       */
       function OnResize(){
         if(ISCONNECTED){
           document.getElementById('joystick').remove();
