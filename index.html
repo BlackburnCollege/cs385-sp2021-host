@@ -74,7 +74,7 @@
   <body class="body" onresize="OnResize()">
     <h4 style="size: 10%; color: white; text-align: center;">Flow Controller</h4>
     <!-- The field that people insert their IP -->
-    <div id="setup" class="setup"></div>
+    <div id="setup" class="setup">
       IP: <br/>
       <input
         id="wsip"
@@ -546,7 +546,16 @@
           gameButtons.hidden = false;
           setupButtons.hidden = true;
           token.token = tokenInput.value;
-          doSend(JSON.stringify(token));
+
+          //force upercase
+          token.token = token.token.toUpperCase();
+
+          header.header = "user";
+          header.type = "Token";
+          header.jsonBlock = JSON.stringify(token);
+
+          doSend(JSON.stringify(header));
+
           if(leftJoy == null){
             leftJoy = new JoyStick('left',JSON.parse(joyParm));
           }
@@ -618,7 +627,7 @@
         user.controller.joystick.y = betterController.joystick.y;
 
         header.header = "user";
-        header.type = "userController";
+        header.type = "user";
         header.jsonBlock = JSON.stringify(user);
 
         doSend(JSON.stringify(header));
